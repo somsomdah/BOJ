@@ -1,46 +1,45 @@
+import sys
+
 n=int(input())
-a=list(map(int,input().split()))
-operators=list(map(int,input().split()))
-results=[]
-checklist=operators
+numbers=list(map(int,input().split()))
+pl,mn,mt,dv=map(int,input().split())
 
-#a의 level , node 값, o의 index
-def bfs(i,k,o):
-     print(i,k,o)
-     if i>=n-1:
-          results.append(k)
+res_max=-sys.maxsize
+res_min=sys.maxsize
+
+def dfs(L,op_list,total):
+     #print(op_list)
+     global res_max,res_min
+     
+     if L==n-1:
+          #print("max",res_max,total)
+          res_max=max(res_max,total)
+          res_min=min(res_min,total)
           return
+
      else:
-          if checklist[o]>0:
-               if o<4:
-                    if o==0:
-                         bfs(i+1,a[i]+a[i+1],o)
-                    if o==1:
-                         bfs(i+1,a[i]-a[i+1],o)
-                    if o==2:
-                         bfs(i+1,a[i]*a[i+1],o)
-                    if o==3:
-                         bfs(i+1,a[i]//a[i+1],o)
-                    checklist[o]-=-1
-          else:
-               if o<3:
-                    if o==0:
-                         bfs(i+1,a[i]+a[i+1],o+1)
-                    if o==1:
-                         bfs(i+1,a[i]-a[i+1],o+1)
-                    if o==2:
-                         bfs(i+1,a[i]*a[i+1],o+1)
-                    if o==3:
-                         bfs(i+1,a[i]//a[i+1],o+1)
-                    checklist[o+1]-=1
+          for i in range(4):
+               if op_list[i]>0:
+                    op_list[i]-=1
+                    if i==0:
+                         dfs(L+1,op_list,total+numbers[L+1])
+                    if i==1:
+                         dfs(L+1,op_list,total-numbers[L+1])
+                    if i==2:
+                         dfs(L+1,op_list,total*numbers[L+1])
+                    if i==3:
+                         dfs(L+1,op_list,int(total/numbers[L+1]))
+                    op_list[i]+=1
+
+dfs(0,[pl,mn,mt,dv],numbers[0])
+print(res_max)
+print(res_min)
 
 
 
-for i in range(3):
-     bfs(0,a[0],i)
 
-print(max(results))
-print(min(results))
+                         
+               
           
-
-
+          
+     
