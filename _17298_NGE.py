@@ -1,13 +1,17 @@
 n = int(input())
 nums = list(map(int, input().split()))
-stack = []
+stack = [] # n의 인덱스
 
 ans = [-1 for _ in range(n)]
 
-for i in range(len(nums)):
-    #스택이 비지 않았으면서, 다음수가 해당수보다 크면
-    while len(stack)!=0 and nums[stack[-1]] < nums[i]:
-        #ans[(stack.pop()=현재 수에 해당하는 인덱스)]배열에 다음수 집어넣기
+for i in range(n): # 현재 수의 인덱스
+    #스택이 비지 않았으면서, 이전 수보다 현재 수가 크면
+    while stack and nums[stack[-1]] < nums[i]:
+        
+        # 이전 수의 오큰수는 현재 수
         ans[stack.pop()] = nums[i]
+
+    # 스택이 비었거나 이전 수보다 현재 수가 작으면
     stack.append(i)
+    
 print(*ans)
